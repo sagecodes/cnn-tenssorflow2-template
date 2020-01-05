@@ -16,7 +16,7 @@ from tensorflow.keras.applications.resnet_v2 import ResNet50V2
 
 print(tf.__version__)
 
-class resnet:
+class Resnet:
 
     def __init__(self,num_classes,INIT_LR,NUM_EPOCHS,IMG_SHAPE):
 
