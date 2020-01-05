@@ -40,3 +40,12 @@ class resnet:
         self.model.compile(loss="categorical_crossentropy",
                     optimizer=self.opt,
                     metrics=["accuracy"])
+
+    def train(self,BATCH_SIZE,NUM_EPOCHS, train_data,val_data):
+        self.model.fit_generator(
+        train_data,
+        steps_per_epoch = train_data.samples // BATCH_SIZE,
+        validation_data = val_data, 
+        validation_steps = val_data.samples // BATCH_SIZE,
+        epochs = NUM_EPOCHS, 
+        verbose=1)
