@@ -25,10 +25,10 @@ class Train_generator:
     def image_load_csv(self,df):
 
         # Shuffle dataFrame 
-        Shuffle_file_paths_and_labels_df = df.sample(frac=1).reset_index(drop=True)
+        Shuffled_df = df.sample(frac=1).reset_index(drop=True)
 
         self.train_generator = self.train_datagen.flow_from_dataframe(
-            dataframe=Shuffle_file_paths_and_labels_df,
+            dataframe=Shuffled_df,
             directory= self.data_dir,
             x_col="FilePath",
             y_col="Label",
@@ -40,7 +40,7 @@ class Train_generator:
             subset='training') # set as training data
 
         self.validation_generator = self.train_datagen.flow_from_dataframe(
-            dataframe=Shuffle_file_paths_and_labels_df,
+            dataframe=Shuffled_df,
             directory = self.data_dir,
             x_col="FilePath",
             y_col="Label",

@@ -13,21 +13,24 @@ from tensorflow.keras.models import Model
 
 # Get Resnet50 model from TF
 from tensorflow.keras.applications.resnet_v2 import ResNet50V2
-
+ 
 print(tf.__version__)
 
 class Resnet:
 
     def __init__(self,num_classes,INIT_LR,NUM_EPOCHS,IMG_SHAPE):
 
-        self.res_net50v2 = ResNet50V2(weights='imagenet', include_top=False, input_shape=IMG_SHAPE)
+        self.res_net50v2 = ResNet50V2(weights='imagenet',
+                                        include_top=False,
+                                        input_shape=IMG_SHAPE)
 
         x = self.res_net50v2.output
         x = GlobalAveragePooling2D()(x)
         x = Dropout(0.3)(x)
 
         self.predictions = Dense(num_classes, activation= 'softmax')(x)
-        self.model = Model(inputs = self.res_net50v2.input, outputs = self.predictions)
+        self.model = Model(inputs = self.res_net50v2.input,
+                            outputs = self.predictions)
 
         # self.model.summary()
 
@@ -42,6 +45,7 @@ class Resnet:
                     metrics=["accuracy"])
 
     def train(self,BATCH_SIZE,NUM_EPOCHS, train_data,val_data):
+
         self.train_history = self.model.fit_generator(
         train_data,
         steps_per_epoch = train_data.samples // BATCH_SIZE,
@@ -56,12 +60,21 @@ class Resnet:
         # plot the training loss and accuracy
         plt.style.use("ggplot")
         plt.figure()
-        plt.plot(np.arange(0, NUM_EPOCHS), self.train_history.history["loss"], label="train_loss")
-        plt.plot(np.arange(0, NUM_EPOCHS), self.train_history.history["val_loss"], label="val_loss")
-        plt.plot(np.arange(0, NUM_EPOCHS), self.train_history.history["accuracy"], label="train_acc")
-        plt.plot(np.arange(0, NUM_EPOCHS), self.train_history.history["val_accuracy"], label="val_acc")
+        plt.plot(np.arange(0, NUM_EPOCHS),
+                    self.train_history.history["loss"],
+                    label="train_loss")
+        plt.plot(np.arange(0, NUM_EPOCHS),
+                    self.train_history.history["val_loss"],
+                    label="val_loss")
+        plt.plot(np.arange(0, NUM_EPOCHS),
+                    self.train_history.history["accuracy"],
+                    label="train_acc")
+        plt.plot(np.arange(0, NUM_EPOCHS),
+                    self.train_history.history["val_accuracy"],
+                    label="val_acc")
         plt.title("Training Loss and Accuracy")
         plt.xlabel("Epoch #")
         plt.ylabel("Loss/Accuracy")
         plt.legend()
         plt.show()
+        plt.close()
