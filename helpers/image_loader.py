@@ -55,8 +55,6 @@ class Train_generator:
 
         self.train_generator = self.train_datagen.flow_from_directory(
             directory= self.data_dir,
-            x_col="FilePath",
-            y_col="Label",
             target_size=(self.img_height, self.img_width),
             batch_size=self.batch_size,
             seed=42,
@@ -66,8 +64,6 @@ class Train_generator:
 
         self.validation_generator = self.train_datagen.flow_from_directory(
             directory = self.data_dir,
-            x_col="FilePath",
-            y_col="Label",
             target_size=(self.img_height, self.img_width),
             batch_size=self.batch_size,
             seed=42,
