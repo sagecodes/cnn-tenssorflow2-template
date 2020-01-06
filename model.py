@@ -50,6 +50,8 @@ class Resnet:
         epochs = NUM_EPOCHS, 
         verbose=1)
 
+        return self.train_history
+
     def history(self,NUM_EPOCHS):
         # plot the training loss and accuracy
         plt.style.use("ggplot")
