@@ -4,41 +4,72 @@ import numpy as np
 import pandas as pd
 
 class Train_generator:
+
     """
     TODO: Add doc string
     """
 
-    def __init__(self,img_height,img_width,BATCH_SIZE, data_dir, df):
-        # Shuffle dataFrame 
-        Shuffle_file_paths_and_labels_df = df.sample(frac=1).reset_index(drop=True)
-        # Create Data Generators
-
-        train_datagen = ImageDataGenerator(
+    def __init__(self,img_height,img_width,batch_size, data_dir):
+        
+        self.data_dir = data_dir
+        self.img_height = img_height
+        self.img_width = img_width
+        self.batch_size = batch_size
+        self.train_datagen = ImageDataGenerator(
             rescale=1./255,
         #     shear_range=0.2,
         #     zoom_range=0.2,
             horizontal_flip=True,
-            validation_split=0.2) # set validation split
+            validation_split=0.2)
 
-        self.train_generator = train_datagen.flow_from_dataframe(
+    def image_load_csv(self,df):
+
+        # Shuffle dataFrame 
+        Shuffle_file_paths_and_labels_df = df.sample(frac=1).reset_index(drop=True)
+
+        self.train_generator = self.train_datagen.flow_from_dataframe(
             dataframe=Shuffle_file_paths_and_labels_df,
-            directory= data_dir,
+            directory= self.data_dir,
             x_col="FilePath",
             y_col="Label",
-            target_size=(img_height, img_width),
-            batch_size=BATCH_SIZE,
+            target_size=(self.img_height, self.img_width),
+            batch_size=self.batch_size,
             seed=42,
             shuffle=True,
             class_mode='categorical',
             subset='training') # set as training data
 
-        self.validation_generator = train_datagen.flow_from_dataframe(
+        self.validation_generator = self.train_datagen.flow_from_dataframe(
             dataframe=Shuffle_file_paths_and_labels_df,
-            directory = data_dir,
+            directory = self.data_dir,
             x_col="FilePath",
             y_col="Label",
-            target_size=(img_height, img_width),
-            batch_size=BATCH_SIZE,
+            target_size=(self.img_height, self.img_width),
+            batch_size=self.batch_size,
+            seed=42,
+            shuffle=True,
+            class_mode='categorical',
+            subset='validation') # set as validation data
+
+    def image_load_dir(self):
+
+        self.train_generator = self.train_datagen.flow_from_directory(
+            directory= self.data_dir,
+            x_col="FilePath",
+            y_col="Label",
+            target_size=(self.img_height, self.img_width),
+            batch_size=self.batch_size,
+            seed=42,
+            shuffle=True,
+            class_mode='categorical',
+            subset='training') # set as training data
+
+        self.validation_generator = self.train_datagen.flow_from_directory(
+            directory = self.data_dir,
+            x_col="FilePath",
+            y_col="Label",
+            target_size=(self.img_height, self.img_width),
+            batch_size=self.batch_size,
             seed=42,
             shuffle=True,
             class_mode='categorical',
